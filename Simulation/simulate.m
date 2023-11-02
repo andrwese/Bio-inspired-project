@@ -1,4 +1,6 @@
 function simulate()
+addpath("../Optimization/");
+addpath("../Modelling/");
     %% Define fixed paramters
     m1 =.0393 + .2;         m2 =.0368; 
     mp = .00783;            mb = 1.55;
