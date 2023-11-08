@@ -11,12 +11,12 @@ p = [l_OA l_AB l_BC l_CD l_Omp l_Amb l_Bm1 l_Cm2 mp mb m1 m2 Ip Ib I1 I2 Ir N g]
 
 
 % generalized coordinates
-q = [q1 q2 q3 q4]';
+q = [q1 q2 q3 q4]'; % pendulum, hip, knee, shoulder
 dq = [dq1 dq2 dq3 dq4]';
 ddq = [ddq1 ddq2 ddq3 ddq4]';
 
 % Control parameters
-u = [tau1 tau2]';
+u = [tau1 tau2 tau3]'; % hip, knee, shoulder
 
 % Unit vectors
 ihat = [1;0;0];
@@ -28,7 +28,7 @@ khat = [0;0;1];
 ddt = @(r) jacobian(r,[q;dq])*[dq;ddq]; 
 
 % Define vectors to keypoints 
-rA = [l_OA*sin(q1); 0; -l_OA*cos(q1)]; % attachment point of body to pendulum
+rA = [l_OA*sin(q1); 0; -l_OA*cos(q1)]; % pendulum 
 rB = rA + [l_AB*sin(q1+q2); 0; -l_AB*cos(q1+q2)]; % hip joint
 rC = rB + [l_BC*sin(q1+q2+q3); 0; -l_BC*cos(q1+q2+q3)]; % knee joint
 rD = rC + [l_CD*sin(q1+q2+q3+q4); 0; -l_CD*cos(q1+q2+q3+q4)]; % end effector
@@ -72,7 +72,7 @@ T2 = (1/2)*mb * dot(dr_mb,dr_mb) + (1/2) * Ib * omega2^2;
 T3 = (1/2)*m1 * dot(dr_m1,dr_m1) + (1/2) * I1 * omega3^2;
 T4 = (1/2)*m2 * dot(dr_m2,dr_m2) + (1/2) * I2 * omega4^2;
 T1r = (1/2)*Ir*(N*dq3)^2; % Kinetic energy of hip motor
-T2r = (1/2)*Ir*(dq3 + N*dq4)^2; % Kinetic energy of knee motor
+T2r = (1/2)*Ir*(N*dq4)^2; % Kinetic energy of knee motor
 
 Vgp = mp*g*dot(r_mp, khat);
 Vgb = mb*g*dot(r_mb, khat);
