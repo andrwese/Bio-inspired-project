@@ -1,7 +1,8 @@
 function draw_plots(Z,p,U,tspan)
 % Draws plots for the whole timespan, z contains values for every timestep
+    nz = p(end); % generalized
     %% Compute Energy
-    E = energy_project(Z,p);
+    E = energy_foot(Z,p);
     figure(1); clf
     plot(tspan,E);xlabel('Time (s)'); ylabel('Energy (J)');
 
@@ -27,14 +28,14 @@ function draw_plots(Z,p,U,tspan)
     xlabel('Time (s)'); ylabel('Velocity (m)'); legend({'vel_x','vel_y'});
     
     figure(4)
-    plot(tspan,Z(1:4,:)*180/pi)
-    legend('$q_1$','$q_2$','$q_3$','$q_4$','Interpreter','latex');
+    plot(tspan,Z(1:nz,:)*180/pi)
+    legend('$q_1$','$q_2$','$q_3$','Interpreter','latex');
     xlabel('Time (s)');
     ylabel('Angle (deg)');
     
     figure(5)
-    plot(tspan,Z(5:8,:)*180/pi)
-    legend('$\dot{q}_1$','$\dot{q}_2$','$\dot{q}_3$','$\dot{q}_4$','Interpreter','latex');
+    plot(tspan,Z(nz+1:2*nz,:)*180/pi)
+    legend('$\dot{q}_1$','$\dot{q}_2$','$\dot{q}_3$','Interpreter','latex');
     xlabel('Time (s)');
     ylabel('Angular Velocity (deg/sec)');
 

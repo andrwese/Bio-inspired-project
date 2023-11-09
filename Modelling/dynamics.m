@@ -7,8 +7,9 @@ function dz = dynamics(z,p,u)
 % OUPUT:
 % dz - time derivative at current timestep, dz(t) = [dq(t) ddq(t)]'
 
+    nz = p(end); % number of generalized coordinates
     % Get mass matrix
-    A = A_project(z,p);
+    A = A_foot(z,p);
     
     % Compute Controls
     % use the optimal u-values given by the solver for now, later we want
@@ -16,13 +17,13 @@ function dz = dynamics(z,p,u)
     tau = u; %control_law(t,z,z_des);
     
     % Get b = Q - V(q,qd) - G(q)
-    b = b_project(z,tau,p);
+    b = b_foot(z,tau,p);
     
     % Solve for qdd.
     qdd = A\(b);
     dz = 0*z;
     
     % Form dz
-    dz(1:4) = z(5:8);
-    dz(5:8) = qdd;
+    dz(1:nz) = z(nz+1:2*nz);
+    dz(nz+1:2*nz) = qdd;
 end

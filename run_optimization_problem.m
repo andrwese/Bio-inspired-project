@@ -13,9 +13,9 @@ opti = casadi.Opti();       % our optimal solver
 p = opti.parameter(19, 1);
 opti.set_value(p,parameters());
 
-dt = 0.01;
-tf = 10;
-N = floor(tf/dt);
+dt = 0.01;          % length of each timestep
+tf = 10;            % final time
+N = floor(tf/dt);   % number of timesteps
 
 % Initial values: everything is standing still
 z0 = opti.parameter(8,1);
@@ -45,10 +45,10 @@ q_max = [1 1 pi/2 pi/2]'; % joint angle torques, rad
 final_foot_pos = position_foot(Z(:,end),p);
 final_height = -0.3; % ---- CHECK ------ find reasonable values
 
-opti.subject_to(-u_max <= U <= u_max);        % torque limit constraints
-opti.subject_to(-q_max <= Z(1:4,:) <= q_max); % joint limit constraints
-opti.subject_to(Z(:,1)==z0);             % enforce initial values
-opti.subject_to(final_foot_pos(2) == final_height); % finish with end effector at given height
+% opti.subject_to(-u_max <= U <= u_max);        % torque limit constraints
+% opti.subject_to(-q_max <= Z(1:4,:) <= q_max); % joint limit constraints
+% opti.subject_to(Z(:,1)==z0);             % enforce initial values
+% opti.subject_to(final_foot_pos(2) == final_height); % finish with end effector at given height
 
 % Provide initial guesses for the solver
 %opti.set_initial(); % TODO

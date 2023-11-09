@@ -13,7 +13,7 @@ function animateSol(tspan, x,p)
     h_title = title('t=0.0s');
     
     axis equal
-    axis([-.2 .2 -.3 .1]);
+    axis([-.2 .2 -.6 .01]);
 
     %Step through and update animation
     for i = 1:length(tspan)
@@ -23,12 +23,12 @@ function animateSol(tspan, x,p)
         end
         t = tspan(i);
         z = x(:,i); 
-        keypoints = keypoints_project(z,p);
+        keypoints = keypoints_foot(z,p);
 
         rA = keypoints(:,1); % Vector to body
         rB = keypoints(:,2); % Vector to hip joint
         rC = keypoints(:,3); % Vector to knee joint
-        rD = keypoints(:,4); % Vector to end effector
+        rD = position_foot(z,p);%keypoints(:,4); % Vector to end effector
 
         set(h_title,'String',  sprintf('t=%.2f',t) ); % update title
         
