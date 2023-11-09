@@ -4,14 +4,14 @@ function draw_plots(Z,p,U,tspan)
     %% Compute Energy
     E = energy_foot(Z,p);
     figure(1); clf
-    plot(tspan,E);xlabel('Time (s)'); ylabel('Energy (J)');
+    plot(tspan,E(1:end-1));xlabel('Time (s)'); ylabel('Energy (J)');
 
     %% Compute foot position over time
     rD = zeros(2,length(tspan));
     vD = zeros(2,length(tspan));
     for i = 1:length(tspan)
-        rD(:,i) = position_foot(Z(:,i),p);
-        vD(:,i) = velocity_foot(Z(:,i),p);
+        rD(:,i) = position_foot(Z(:,i+1),p);
+        vD(:,i) = velocity_foot(Z(:,i+1),p);
     end
     
     figure(2); clf;
@@ -28,13 +28,13 @@ function draw_plots(Z,p,U,tspan)
     xlabel('Time (s)'); ylabel('Velocity (m)'); legend({'vel_x','vel_y'});
     
     figure(4)
-    plot(tspan,Z(1:nz,:)*180/pi)
+    plot(tspan,Z(1:nz,1:end-1)*180/pi)
     legend('$q_1$','$q_2$','$q_3$','Interpreter','latex');
     xlabel('Time (s)');
     ylabel('Angle (deg)');
     
     figure(5)
-    plot(tspan,Z(nz+1:2*nz,:)*180/pi)
+    plot(tspan,Z(nz+1:2*nz,1:end-1)*180/pi)
     legend('$\dot{q}_1$','$\dot{q}_2$','$\dot{q}_3$','Interpreter','latex');
     xlabel('Time (s)');
     ylabel('Angular Velocity (deg/sec)');

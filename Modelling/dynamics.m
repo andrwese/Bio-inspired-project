@@ -7,14 +7,14 @@ function dz = dynamics(z,p,u)
 % OUPUT:
 % dz - time derivative at current timestep, dz(t) = [dq(t) ddq(t)]'
 
-    nz = p(end); % number of generalized coordinates
+    nz = 3; % p(end); % number of generalized coordinates
     % Get mass matrix
     A = A_foot(z,p);
     
     % Compute Controls
     % use the optimal u-values given by the solver for now, later we want
     % to PD-control our states towards the optimal trajectory
-    tau = u; %control_law(t,z,z_des);
+    tau = u;
     
     % Get b = Q - V(q,qd) - G(q)
     b = b_foot(z,tau,p);

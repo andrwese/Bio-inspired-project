@@ -19,10 +19,10 @@ function animateSol(tspan, x,p)
     for i = 1:length(tspan)
         % skip frame.
         if mod(i,10)
-            continue;
+            %continue;
         end
         t = tspan(i);
-        z = x(:,i); 
+        z = x(:,i+1); 
         keypoints = keypoints_foot(z,p);
 
         rA = keypoints(:,1); % Vector to body
@@ -44,6 +44,6 @@ function animateSol(tspan, x,p)
         set(h_CD,'XData',[rC(1) rD(1)]);
         set(h_CD,'YData',[rC(2) rD(2)]);
 
-        pause(.01)
+        pause(.1)
     end
 end
