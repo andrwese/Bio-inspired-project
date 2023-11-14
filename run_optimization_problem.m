@@ -7,7 +7,7 @@ addpath("Modelling/");
 addpath("Optimization/");
 addpath("Visualization/");
 
-%%
+
 opti = casadi.Opti();       % our optimal solver
 
 % define parameters
@@ -19,7 +19,7 @@ dt = 0.01;          % length of each timestep
 tf = 0.5;           % final time
 N = floor(tf/dt);   % number of timestep
 nz = param(end);    % number of generalized coordinates
-solve_w_arm = nz==4;
+solve_w_arm = nz==4;% solve optimization problem with or without arm dynamics
 
 % Initial values: everything is standing still
 z0 = opti.parameter(2*nz,1);
@@ -29,11 +29,11 @@ if solve_w_arm % add initial condition for arm -> straight up
 end
 opti.set_value(z0,z0_param);
 
-% define decision variables
+% define decision variables Z and U
 Z = opti.variable(2*nz,N+1);    % state trajectory matrix (angles and ang. vel)
 q = Z(1:nz,:);                  % generalized coordinates
 dq = Z(nz+1:2*nz,:);            % generalized derivatives
-U = opti.variable(nz-1,N);         % control trajectory matrix (motor torques)
+U = opti.variable(nz-1,N);      % control trajectory matrix (motor torques)
 
 % define objective function
 opti.minimize(objective(Z,p,U));
