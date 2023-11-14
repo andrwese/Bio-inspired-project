@@ -1,10 +1,10 @@
 function p = parameters()
 % Defines fixed paramters used in the simulation
-mp = .00783;            % pendulum mass           
-mb = 1.55;              % body mass
-m1 =.0393 + .4;         % thigh mass      
-m2 =.0368 + .4;         % leg mass
-m3 =.0368 + .4;         % arm mass 
+mp =.145;               % pendulum mass           
+mb =.0436 + 2*0.210;    % body mass + 2 motors
+m1 =.047 + .21 + 0.014; % thigh mass + 1 motor + clamp
+m2 =.02274 + .014;      % leg mass + clamp
+m3 =.01756 + .014;      % arm mass 
 
 Ip = 9.25 * 10^-6;      % Inertia of pendulum
 Ib = 22.176 * 10^-6;    % Inertia of body
@@ -12,16 +12,16 @@ I1 = 25.1 * 10^-6;      % Inertia of hip
 I2 = 25.1 * 10^-6;      % Inertia of knee
 I3 = 25.1 * 10^-6;      % Inertia of arm
 
-l_OA=.15;               % length from origin to end of pendulum
-l_AB=.10;               % end of pendulum to hip joint
-l_BC=.085;              % length of thigh link
-l_CD=.087;              % length of leg link
-l_AE=.080;              % length of arm link
+l_OA=.152;              % length from origin to end of pendulum
+l_AB=.083;              % end of pendulum to hip joint
+l_BC=.082;              % length of thigh link
+l_CD=.088;              % length of leg link
+l_AE=.096;              % length of arm link
 l_Omp=l_OA/2;           % origin to CM pendulum
 l_Amb=0;                % end of pendulum to CM body
-l_Bm1=l_BC/2;           % hip joint to CM thigh link
-l_Cm2=l_CD/2;           % knee joint to CM leg link
-l_Am3=l_AE/2;           % shoulder joint to CM of arm link
+l_Bm1=0.018;            % hip joint to CM thigh link
+l_Cm2=0.018;            % knee joint to CM leg link
+l_Am3=l_AE/2;%0.018;            % shoulder joint to CM of arm link
 
 N = 18.75;              % gear ratio motor
 Ir = 0.0035/N^2*10^-6;  % motor inertia

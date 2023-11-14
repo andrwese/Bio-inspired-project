@@ -30,7 +30,7 @@ function animateSol(tspan,x,p)
     for i = 1:length(tspan)
         % skip frame.
         if mod(i,10)
-            continue;
+            %continue;
         end
         t = tspan(i);
         z = x(:,i+1); 
@@ -81,6 +81,6 @@ function animateSol(tspan,x,p)
         set(h_AE,'YData',[rA(2) rE(2)]);
         end
 
-        pause(.01)
+        pause(.1)
     end
 end

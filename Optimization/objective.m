@@ -18,7 +18,6 @@ function f = objective(Z,p,U)
 
     % maximize final leg vel, while minimizing ang vel on body and
     % minimizing applied torques
-    f = -final_leg_vel(2)  + torques;
-    %f = -final_leg_vel + torques;
+    f = -final_leg_vel(2);  %+ torques;
 
 end

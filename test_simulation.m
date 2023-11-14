@@ -14,8 +14,9 @@ addpath("./Visualization/");
     tspan = linspace(0, tf, N); 
     q0 = [0.1; zeros(nz-1,1)]; % body is hanging freely
     if nz==4 % arm is not aligned with body
-        q0(end)=2*pi/3;
+        q0(end)=pi;
     end
+    q0(3)=0.5;
     dq0 = zeros(nz,1); % no initial velocity
     z0 = [q0;dq0];
     z_out = zeros(2*nz,N+1);
