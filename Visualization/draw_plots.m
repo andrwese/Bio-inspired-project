@@ -1,6 +1,7 @@
 function draw_plots(Z,p,U,tspan)
 % Draws plots for the whole timespan, z contains values for every timestep
     nz = p(end); % generalized
+    plot_w_arm = nz ==4;
     %% Compute Energy
     E = energy_foot(Z,p);
     figure(1); clf
@@ -10,8 +11,13 @@ function draw_plots(Z,p,U,tspan)
     rD = zeros(2,length(tspan));
     vD = zeros(2,length(tspan));
     for i = 1:length(tspan)
+        if plot_w_arm
+        rD(:,i) = position_foot_and_arm(Z(:,i+1),p);
+        vD(:,i) = velocity_foot_and_arm(Z(:,i+1),p);
+        else
         rD(:,i) = position_foot(Z(:,i+1),p);
         vD(:,i) = velocity_foot(Z(:,i+1),p);
+        end
     end
     
     figure(2); clf;
@@ -29,18 +35,31 @@ function draw_plots(Z,p,U,tspan)
     
     figure(4)
     plot(tspan,Z(1:nz,1:end-1)*180/pi)
+    if plot_w_arm 
+    legend('$q_1$','$q_2$','$q_3$','$q_4$','Interpreter','latex');
+    else
     legend('$q_1$','$q_2$','$q_3$','Interpreter','latex');
+    end
     xlabel('Time (s)');
     ylabel('Angle (deg)');
     
     figure(5)
     plot(tspan,Z(nz+1:2*nz,1:end-1)*180/pi)
+    if plot_w_arm
+    legend('$\dot{q}_1$','$\dot{q}_2$','$\dot{q}_3$','$\dot{q}_4$','Interpreter','latex');
+    else 
     legend('$\dot{q}_1$','$\dot{q}_2$','$\dot{q}_3$','Interpreter','latex');
+    end
     xlabel('Time (s)');
     ylabel('Angular Velocity (deg/sec)');
 
     figure(6)
+    if plot_w_arm
+    plot(tspan,U(1,:),tspan,U(2,:),tspan,U(3,:));
+    legend('$\tau_1$','$\tau_2$','$\tau_3$','Interpreter','latex');
+    else
     plot(tspan,U(1,:),tspan,U(2,:));
     legend('$\tau_1$','$\tau_2$','Interpreter','latex');
+    end
     xlabel('Time(s)'); ylabel('Applied Motor Torques [Nm]')
 end

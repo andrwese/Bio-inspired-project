@@ -1,4 +1,6 @@
-function animateSol(tspan, x,p)
+function animateSol(tspan,x,p)
+    simulate_w_arm = p(end)==4;
+
     figure(7); clf;
     hold on
     % Prepare plot handles
@@ -7,6 +9,9 @@ function animateSol(tspan, x,p)
     h_AB = plot([0],[0],'LineWidth',2);
     h_BC = plot([0],[0],'LineWidth',2);
     h_CD = plot([0],[0],'LineWidth',2);
+    if simulate_w_arm
+    h_AE = plot([0],[0],'LineWidth',2);
+    end
    
     
     xlabel('x'); ylabel('z');
@@ -19,16 +24,23 @@ function animateSol(tspan, x,p)
     for i = 1:length(tspan)
         % skip frame.
         if mod(i,10)
-            %continue;
+            continue;
         end
         t = tspan(i);
         z = x(:,i+1); 
+        if simulate_w_arm
+        keypoints = keypoints_foot_and_arm(z,p);
+        else
         keypoints = keypoints_foot(z,p);
+        end
 
         rA = keypoints(:,1); % Vector to body
         rB = keypoints(:,2); % Vector to hip joint
         rC = keypoints(:,3); % Vector to knee joint
-        rD = position_foot(z,p);%keypoints(:,4); % Vector to end effector
+        rD = keypoints(:,4); % Vector to end effector
+        if simulate_w_arm
+        rE = keypoints(:,5); % Vector to end of arm
+        end
 
         set(h_title,'String',  sprintf('t=%.2f',t) ); % update title
         
@@ -44,6 +56,11 @@ function animateSol(tspan, x,p)
         set(h_CD,'XData',[rC(1) rD(1)]);
         set(h_CD,'YData',[rC(2) rD(2)]);
 
-        pause(.1)
+        if simulate_w_arm
+        set(h_AE,'XData',[rA(1) rE(1)]);
+        set(h_AE,'YData',[rA(2) rE(2)]);
+        end
+
+        pause(.01)
     end
 end

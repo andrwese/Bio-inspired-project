@@ -45,7 +45,7 @@ end
 % set constraints on q, U and Z:
 u_max = [1 1]';          % Nm
 u_min= [0; 0];           % Nm
-q_max = [1 pi/2 0]';     % joint angle torques, rad
+q_max = [1 pi*2/3 0]';     % joint angle torques, rad
 q_min = [-1 0 -pi*2/3]'; % joint angle torques, rad
 final_foot_pos = position_foot(Z(:,end),p);
 final_height = -0.3; 
