@@ -25,7 +25,7 @@ solve_w_arm = nz==4;% solve optimization problem with or without arm dynamics
 z0 = opti.parameter(2*nz,1);
 z0_param = zeros(2*nz,1);
 if solve_w_arm % add initial condition for arm -> straight up
-    z0_param(4)=0.9*pi;
+    z0_param(nz)=pi;
 end
 opti.set_value(z0,z0_param);
 
@@ -57,18 +57,18 @@ end
 
 % set constraints on q, U and Z:
 u_max = ones(nz-1,1);   % Nm
-u_min= zeros(nz-1,1);      % Nm
-final_height = -0.3; 
+u_min= zeros(nz-1,1);   % Nm
+final_height = -0.2; 
 if solve_w_arm
     u_min(end) = -u_max(end);
-    q_max = [.1 pi*2/3 0 pi]';     % joint angle torques, rad
-    q_min = [-.1 0 -pi*2/3 pi/3]'; % joint angle torques, rad
+    q_max = [1 pi*2/3 0 pi*4/3]';     % joint angle torques, rad
+    q_min = [-1 0 -pi*2/3 pi/3]'; % joint angle torques, rad
     final_foot_pos = position_foot_and_arm(Z(:,end),p);
     leg_vel = velocity_foot_and_arm(Z(:,:),p);
     opti.subject_to(q(nz,end)==q_min(nz)); % arm must end in its minimal value
 else
     q_max = [1 pi*2/3 0]';     % joint angle torques, rad
-    q_min = [-1 0 -pi*2/3]'; % joint angle torques, rad
+    q_min = [-1 0 -pi*2/3]';   % joint angle torques, rad
     final_foot_pos = position_foot(Z(:,end),p);
     leg_vel = velocity_foot(Z(:,:),p);
 end
@@ -77,8 +77,7 @@ opti.subject_to(u_min <= U <= u_max);        % torque limit constraints
 opti.subject_to(q_min <= Z(1:nz,:) <= q_max);% joint limit constraints
 opti.subject_to(Z(:,1)==z0);                 % enforce initial values
 opti.subject_to(final_foot_pos(2) == final_height); % finish with end effector at given height
-%opti.subject_to(dq(2,:) >= 0); % hip joint must have pos ang vel
-%opti.subject_to(leg_vel(2,:)>=0);
+%opti.subject_to(U(1:2,:) == [0,0]');
 
 
 
@@ -97,4 +96,7 @@ tspan = linspace(0,tf,N);
 draw_plots(sol.value(Z),param,sol.value(U),tspan);
 animateSol(tspan,sol.value(Z),param);
 
-
+optimal_torques = sol.value(U);
+optimal_angles = sol.value(Z(2:nz,:));
+save('optimal_torques.mat', 'optimal_torques');
+save('optimal_angles.mat','optimal_angles')

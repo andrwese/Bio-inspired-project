@@ -18,10 +18,10 @@ l_BC=.082;              % length of thigh link
 l_CD=.088;              % length of leg link
 l_AE=.096;              % length of arm link
 l_Omp=l_OA/2;           % origin to CM pendulum
-l_Amb=0;                % end of pendulum to CM body
-l_Bm1=0.018;            % hip joint to CM thigh link
-l_Cm2=0.018;            % knee joint to CM leg link
-l_Am3=l_AE/2;%0.018;            % shoulder joint to CM of arm link
+l_Amb=0.0561;           % end of pendulum to CM body
+l_Bm1=0.0661;           % hip joint to CM thigh link
+l_Cm2=l_CD; %0.0233;           % knee joint to CM leg link
+l_Am3=l_AE; %0.0286;           % shoulder joint to CM of arm link
 
 N = 18.75;              % gear ratio motor
 Ir = 0.0035/N^2*10^-6;  % motor inertia
