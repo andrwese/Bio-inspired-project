@@ -6,6 +6,8 @@ addpath("AutoDerived/");
 addpath("Modelling/");
 addpath("Optimization/");
 addpath("Visualization/");
+addpath("./data");
+
 
 
 opti = casadi.Opti();       % our optimal solver
@@ -77,8 +79,6 @@ opti.subject_to(u_min <= U <= u_max);        % torque limit constraints
 opti.subject_to(q_min <= Z(1:nz,:) <= q_max);% joint limit constraints
 opti.subject_to(Z(:,1)==z0);                 % enforce initial values
 opti.subject_to(final_foot_pos(2) == final_height); % finish with end effector at given height
-%opti.subject_to(U(1:2,:) == [0,0]');
-
 
 
 
@@ -87,7 +87,7 @@ opti.set_initial(Z, ones(2*nz,N+1));
 opti.set_initial(U, ones(nz-1,N));
 
 % Solve the NLP using IPOPT
-opti.solver('ipopt');   % set numerical backend
+opti.solver('ipopt',struct(),struct('print_level', 0));   % set numerical backend
 
 sol = opti.solve();     % obtain solution
 
@@ -98,5 +98,8 @@ animateSol(tspan,sol.value(Z),param);
 
 optimal_torques = sol.value(U);
 optimal_angles = sol.value(Z(2:nz,:));
-save('optimal_torques.mat', 'optimal_torques');
-save('optimal_angles.mat','optimal_angles')
+optimal_angular_velocities = sol.value(Z(nz+2:end,:));
+
+save('./data/optimal_torques.mat', 'optimal_torques');
+save('./data/optimal_angles.mat','optimal_angles');
+save('./data/optimal_angular_velocities.mat','optimal_angular_velocities');
