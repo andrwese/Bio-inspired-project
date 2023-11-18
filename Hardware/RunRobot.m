@@ -202,17 +202,15 @@ function output_data = RunRobot()
         h8(1).YData(end+1:end+N) = tau4;
         h8(2).YData(end+1:end+N) = tau4_des;
 
-        % How can I pass this p into the function/script?
-        l_AB=.083;
-        l_BC=.082;
-        l_CD=.088;
-        l_OA=.152;
-        p = [l_AB l_BC l_CD l_OA];
-        r_foot = position_foot([q1 q2 q3],p); % will be a block of size N with three rows (x,y,z) 
-        v_foot = velocity_foot([q1 q2 q3 w1 w2 w3],p);
+        
+        p = parameters();
+        z = [q1 q1 q3 q4 w1 w2 w3 w4]';
+        r_foot = position_foot(z,p); % will be a block of size N with three rows (x,y,z) 
+        v_foot = velocity_foot(z,p);
 
-        r_foot_des = position_foot([q1_des q2_des q3_des],p);
-        v_foot_des = velocity_foot([q1_des q2_des q3_des w1_des w2_des w3_des],p);
+        z_des = [q1_des q2_des q3_des q4_des w1_des w2_des w3_des w4_des];
+        r_foot_des = position_foot(z_des,p);
+        v_foot_des = velocity_foot(z_des,p);
         
         h9(1).YData(end+1:end+N) = r_foot(3,:);
         h9(2).YData(end+1:end+N) = r_foot_des(3,:);
@@ -224,12 +222,12 @@ function output_data = RunRobot()
         h11(2).YData(end+1:end+N) = v_foot_des;
     end
     
-    q_data = load('../data/optimal_angles.mat');
-    optimal_q = q_data.optimal_angles;
-    w_data = load('../data/optimal_angular_velocities.mat');
-    optimal_w = w_data.optimal_angular_velocities_data;
-    torque_data = load('../data/optimal_torques.mat');
-    optimal_torques = torque_data.optimal_torques;
+    q_data = load('./data/optimal_angles.mat');
+    optimal_q = q_data.optimal_angles(1);
+    w_data = load('./data/optimal_angular_velocities.mat');
+    optimal_w = w_data.optimal_angular_velocities(1);
+    torque_data = load('./data/optimal_torques.mat');
+    optimal_torques = torque_data.optimal_torques(1);
 
     start_period = 2;
     traj_period = 0.5;
@@ -242,10 +240,10 @@ function output_data = RunRobot()
     duty_max = 1.0;
 
     input = [start_period traj_period end_period q0 K D duty_max];
-    input = [input reshape(optimal_angles, 1, [])];
+    input = [input reshape(optimal_q, 1, [])];
     input = [input reshape(optimal_w, 1, [])];
     input = [input reshape(optimal_torques, 1, [])];
-    output_size = 22;
+    output_size = 23;
 
     output_data = RunExperiment(frdm_ip,frdm_port,input,output_size,params);
     linkaxes([a1 a2],'x')
