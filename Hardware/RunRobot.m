@@ -24,6 +24,7 @@ function output_data = RunRobot()
 
     figure(2); clf; % Angles plots
     a3 = subplot(311)
+    h3 = plot(0,0,0,0);
     h3(1).XData = [];
     h3(2).XData = [];
     h3(1).YData = [];
@@ -92,7 +93,7 @@ function output_data = RunRobot()
     h9(1).YData = [];
     h9(2).YData = [];
     ylabel('z [m]', 'FontSize', 14);
-    legend('True z', 'Desired z', 'FontSize', 14);
+    legend('True z', 'Desired z', 'Interpreter', 'latex', 'FontSize', 14);
     title('Foot vertical position');
 
     a10 = subplot(312)
@@ -102,7 +103,7 @@ function output_data = RunRobot()
     h10(1).YData = [];
     h10(2).YData = [];
     ylabel('x [m]', 'FontSize', 14);
-    legend('True x', 'Desired x', 'FontSize', 14);
+    legend('True x', 'Desired x', 'Interpreter', 'latex', 'FontSize', 14);
     title('Foot horizontal position');
 
     a11 = subplot(313)
@@ -112,7 +113,7 @@ function output_data = RunRobot()
     h11(1).YData = [];
     h11(2).YData = [];
     ylabel('v [m/s]', 'FontSize', 14);
-    legend('True velocity', 'Desired velocity', 'FontSize', 14);
+    legend('True velocity', 'Desired velocity',  'Interpreter', 'latex', 'FontSize', 14);
     title('Foot velocity');
 
 
@@ -188,19 +189,19 @@ function output_data = RunRobot()
         w4_des = new_data(:,16);    % omega4 desired
 
         tau2 = new_data(:,17);      % tau_2
-        tau2_des = new_data(:,20);  % tau_2 desired
+        %tau2_des = new_data(:,20);  % tau_2 desired
         h6(1).YData(end+1:end+N) = tau2;
-        h6(2).YData(end+1:end+N) = tau2_des;
+        %h6(2).YData(end+1:end+N) = tau2_des;
 
         tau3 = new_data(:,18);      % tau_3
-        tau3_des = new_data(:,21);  % tau_3 desired
+        %tau3_des = new_data(:,21);  % tau_3 desired
         h7(1).YData(end+1:end+N) = tau3;
-        h7(2).YData(end+1:end+N) = tau3_des;
+        %h7(2).YData(end+1:end+N) = tau3_des;
 
         tau4 = new_data(:,19);      % tau_4
-        tau4_des = new_data(:,22);  % tau_4 desired
+        %tau4_des = new_data(:,22);  % tau_4 desired
         h8(1).YData(end+1:end+N) = tau4;
-        h8(2).YData(end+1:end+N) = tau4_des;
+        %h8(2).YData(end+1:end+N) = tau4_des;
 
         
         p = parameters();
@@ -208,26 +209,30 @@ function output_data = RunRobot()
         r_foot = position_foot(z,p); % will be a block of size N with three rows (x,y,z) 
         v_foot = velocity_foot(z,p);
 
-        z_des = [q1_des q2_des q3_des q4_des w1_des w2_des w3_des w4_des];
+        z_des = [q1_des q2_des q3_des q4_des w1_des w2_des w3_des w4_des]';
         r_foot_des = position_foot(z_des,p);
         v_foot_des = velocity_foot(z_des,p);
         
-        h9(1).YData(end+1:end+N) = r_foot(3,:);
-        h9(2).YData(end+1:end+N) = r_foot_des(3,:);
+        % True/desired z position
+        h9(1).YData(end+1:end+N) = r_foot(2,:);
+        h9(2).YData(end+1:end+N) = r_foot_des(2,:);
 
+        % True/desired x position
         h10(1).YData(end+1:end+N) = r_foot(1,:);
         h10(2).YData(end+1:end+N) = r_foot_des(1,:);
         
-        h11(1).YData(end+1:end+N) = v_foot;
-        h11(2).YData(end+1:end+N) = v_foot_des;
+        % True / desired z-position of foot
+        h11(1).YData(end+1:end+N) = v_foot(2,:);
+        h11(2).YData(end+1:end+N) = v_foot_des(2,:);
     end
     
+    Nz = 10; % time horizon
     q_data = load('./data/optimal_angles.mat');
-    optimal_q = q_data.optimal_angles(1);
+    optimal_q = q_data.optimal_angles(:,1:Nz+1);
     w_data = load('./data/optimal_angular_velocities.mat');
-    optimal_w = w_data.optimal_angular_velocities(1);
+    optimal_w = w_data.optimal_angular_velocities(:,1:Nz+1);
     torque_data = load('./data/optimal_torques.mat');
-    optimal_torques = torque_data.optimal_torques(1);
+    optimal_torques = torque_data.optimal_torques(:,1:Nz);
 
     start_period = 2;
     traj_period = 0.5;
@@ -237,13 +242,13 @@ function output_data = RunRobot()
 
     K = [1 1 1];
     D = [0.1 0.1 0.1];
-    duty_max = 1.0;
+    duty_max = 0.4;
 
     input = [start_period traj_period end_period q0 K D duty_max];
     input = [input reshape(optimal_q, 1, [])];
     input = [input reshape(optimal_w, 1, [])];
-    input = [input reshape(optimal_torques, 1, [])];
-    output_size = 23;
+    %input = [input reshape(optimal_torques, 1, [])];
+    output_size = 20; %23;
 
     output_data = RunExperiment(frdm_ip,frdm_port,input,output_size,params);
     linkaxes([a1 a2],'x')

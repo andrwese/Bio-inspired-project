@@ -97,8 +97,8 @@ draw_plots(sol.value(Z),param,sol.value(U),tspan);
 animateSol(tspan,sol.value(Z),param);
 
 optimal_torques = sol.value(U);
-optimal_angles = sol.value(Z(2:nz,:));
-optimal_angular_velocities = sol.value(Z(nz+2:end,:));
+optimal_angles = sol.value(Z(1:nz,:));
+optimal_angular_velocities = sol.value(Z(nz+1:end,:));
 
 save('./data/optimal_torques.mat', 'optimal_torques');
 save('./data/optimal_angles.mat','optimal_angles');
