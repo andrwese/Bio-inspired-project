@@ -1,28 +1,12 @@
 function output_data = RunRobot()
-    % RETRIEVING OPTIMAL TRAJECTORIES
-    Nz = 18; % time horizon
-    % Not sending optimal q1 / dq1
-    q_data = load('./data/optimal_angles.mat');
-    optimal_q = q_data.optimal_angles(:,1:Nz+1);
-    dq_data = load('./data/optimal_angular_velocities.mat');
-    optimal_dq = dq_data.optimal_angular_velocities(:,1:Nz+1);
-    torque_data = load('./data/optimal_torques.mat');
-    optimal_torques = torque_data.optimal_torques(:,1:Nz);
-
-    % INIT PARAMS
-    start_period = 2;
-    traj_period = 0.5;
-    end_period = 2;
-
-    q0 = [0 0 0 pi];
-
-    % test
-%     optimal_q = repmat(linspace(0,pi/2,Nz+1),4,1);
-%     optimal_dq = [repmat(linspace(0,0.286,Nz+1),3,1); linspace(pi,pi/2,Nz+1)];
-
-    K = [1 1 1];
-    D = [0.1 0.1 0.1];
-    duty_max = 0.4;
+%     % RETRIEVING OPTIMAL TRAJECTORIES
+%     Nz = 18; % time horizon
+     q_data = load('./data/optimal_angles.mat');
+     optimal_q = q_data.optimal_angles;
+     dq_data = load('./data/optimal_angular_velocities.mat');
+     optimal_dq = dq_data.optimal_angular_velocities;
+     torque_data = load('./data/optimal_torques.mat');
+     optimal_torques = torque_data.optimal_torques;
 
 
     % INITIALIZING PLOTS
@@ -146,10 +130,10 @@ function output_data = RunRobot()
 
     frdm_ip  = '192.168.1.100';     % Nucleo board ip
     frdm_port= 11223;               % Nucleo board port  
-    params.callback = @(new_data)my_callback(new_data, start_period, optimal_q, optimal_dq); % callback function
+    params.callback = @(new_data)my_callback(new_data, optimal_q, optimal_dq, optimal_torques); % callback function
     params.timeout  = 2;            % end of experiment timeout
 
-    function my_callback(new_data, start_period, optimal_q, optimal_dq)
+    function my_callback(new_data, optimal_q, optimal_dq, optimal_torques)
         % Parse new data
         t = new_data(:,1);          % time
 
@@ -177,27 +161,26 @@ function output_data = RunRobot()
         h10(2).XData(end+1:end+N) = t;
         h11(1).XData(end+1:end+N) = t;
         h11(2).XData(end+1:end+N) = t;
-
-        t_idx = floor(t/0.01);
+        
+        dt = 0.03;
+        t_idx = floor(t/dt);
         q1 = new_data(:,2);         % q1
-        %q1_des = new_data(:,3);     % q1 desired
-        q1_des = optimal_q(1,t_idx);
+        %q1_des = optimal_q(1,t_idx);
         h1(1).YData(end+1:end+N) = q1;
-        h1(2).YData(end+1:end+N) = q1_des;
+        %h1(2).YData(end+1:end+N) = q1_des;
 
         dq1 = new_data(:,3);         % omega_1
-        %w1_des = new_data(:,4);     % omega_1 desired
-        dq1_des = optimal_dq(1,t_idx);
+        %dq1_des = optimal_dq(1,t_idx);
 
         h2(1).YData(end+1:end+N) = dq1;
-        h2(2).YData(end+1:end+N) = dq1_des;
+        %h2(2).YData(end+1:end+N) = dq1_des;
 
-        q2 = new_data(:,4);         % q2
+        q2 = -new_data(:,4);         % q2
         q2_des = new_data(:,5);     % q2 desired
         h3(1).YData(end+1:end+N) = q2;
         h3(2).YData(end+1:end+N) = q2_des;
         
-        dq2 = new_data(:,6);         % omega2
+        dq2 = -new_data(:,6);         % omega2
         dq2_des = new_data(:,7);     % omega2 desired
         
 
@@ -239,28 +222,37 @@ function output_data = RunRobot()
         r_foot = position_foot(z,p); % will be a block of size N with three rows (x,y,z) 
         v_foot = velocity_foot(z,p);
 
-        z_des = [q1_des q2_des q3_des q4_des dq1_des dq2_des dq3_des dq4_des]';
-        r_foot_des = position_foot(z_des,p);
-        v_foot_des = velocity_foot(z_des,p);
+%         z_des = [q1_des' q2_des q3_des q4_des dq1_des' dq2_des dq3_des dq4_des]';
+%         r_foot_des = position_foot(z_des,p);
+%         v_foot_des = velocity_foot(z_des,p);
         
         % True/desired z position
         h9(1).YData(end+1:end+N) = r_foot(2,:);
-        h9(2).YData(end+1:end+N) = r_foot_des(2,:);
+%         h9(2).YData(end+1:end+N) = r_foot_des(2,:);
 
         % True/desired x position
         h10(1).YData(end+1:end+N) = r_foot(1,:);
-        h10(2).YData(end+1:end+N) = r_foot_des(1,:);
+%         h10(2).YData(end+1:end+N) = r_foot_des(1,:);
         
         % True / desired z-position of foot
         h11(1).YData(end+1:end+N) = v_foot(2,:);
-        h11(2).YData(end+1:end+N) = v_foot_des(2,:);
+%         h11(2).YData(end+1:end+N) = v_foot_des(2,:);
     end
     
+    % INIT PARAMS
+    start_period = 0;
+    traj_period = 0.5;
+    end_period = 1;
+
+    q0 = [0 0 0 pi];
+
+    K = [2 2 2];
+    D = [0.5 0.1 0.1];
+    duty_max = 1;
 
     input = [start_period traj_period end_period q0 K D duty_max];
     input = [input reshape(optimal_q(2:end,:), 1, [])]; %ignoring q1_des
     input = [input reshape(optimal_dq(2:end,:), 1, [])]; %ignoring dq1_des
-    %input = [input reshape(optimal_torques, 1, [])];
     output_size = 18; %23;
 
     output_data = RunExperiment(frdm_ip,frdm_port,input,output_size,params);

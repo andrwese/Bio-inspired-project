@@ -17,7 +17,7 @@ param = parameters(); % retrieve parameters
 p = opti.parameter(length(param), 1);
 opti.set_value(p,param);
 
-dt = 0.01;          % length of each timestep
+dt = 0.03;          % length of each timestep
 tf = 0.5;           % final time
 N = floor(tf/dt);   % number of timestep
 nz = param(end);    % number of generalized coordinates
@@ -63,7 +63,7 @@ u_min= zeros(nz-1,1);   % Nm
 final_height = -0.2; 
 if solve_w_arm
     u_min(end) = -u_max(end);
-    q_max = [1 pi*2/3 0 pi*4/3]';     % joint angle torques, rad
+    q_max = [1 pi*3/4 0 pi*4/3]';     % joint angle torques, rad
     q_min = [-1 0 -pi*2/3 pi/3]'; % joint angle torques, rad
     final_foot_pos = position_foot_and_arm(Z(:,end),p);
     leg_vel = velocity_foot_and_arm(Z(:,:),p);

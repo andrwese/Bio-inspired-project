@@ -33,7 +33,7 @@ function draw_plots(Z,p,U,tspan)
     
     xlabel('Time (s)'); ylabel('Velocity (m)'); legend({'vel_x','vel_y'});
     
-    figure(4)
+    figure(4); clf;
     plot(tspan,Z(1:nz,1:end-1)*180/pi)
     if plot_w_arm 
     legend('$q_1$','$q_2$','$q_3$','$q_4$','Interpreter','latex');
