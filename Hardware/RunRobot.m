@@ -163,80 +163,89 @@ function output_data = RunRobot()
         h11(2).XData(end+1:end+N) = t;
         
         dt = 0.03;
-        t_idx = floor(t/dt);
+        t_idx = floor(t/dt)+1;
+
         q1 = new_data(:,2);         % q1
-        %q1_des = optimal_q(1,t_idx);
-        h1(1).YData(end+1:end+N) = q1;
-        %h1(2).YData(end+1:end+N) = q1_des;
+        dq1 = new_data(:,3);        % omega_1
 
-        dq1 = new_data(:,3);         % omega_1
-        %dq1_des = optimal_dq(1,t_idx);
-
-        h2(1).YData(end+1:end+N) = dq1;
-        %h2(2).YData(end+1:end+N) = dq1_des;
-
-        q2 = -new_data(:,4);         % q2
+        q2 = -new_data(:,4);        % q2
         q2_des = new_data(:,5);     % q2 desired
-        h3(1).YData(end+1:end+N) = q2;
-        h3(2).YData(end+1:end+N) = q2_des;
-        
-        dq2 = -new_data(:,6);         % omega2
-        dq2_des = new_data(:,7);     % omega2 desired
-        
+        dq2 = -new_data(:,6);       % omega2
+        dq2_des = new_data(:,7);    % omega2 desired
 
         q3 = new_data(:,8);         % q3
-        q3_des = new_data(:,9);    % q3 desired
-        h4(1).YData(end+1:end+N) = q3;
-        h4(2).YData(end+1:end+N) = q3_des;
-
-        dq3 = new_data(:,10);        % omega3
-        dq3_des = new_data(:,11);    % omega3 desired
-        
+        q3_des = new_data(:,9);     % q3 desired
+        dq3 = new_data(:,10);       % omega3
+        dq3_des = new_data(:,11);   % omega3 desired
 
         q4 = new_data(:,12);        % q4
         q4_des = new_data(:,13);    % q4 desired
-        h5(1).YData(end+1:end+N) = q4;
-        h5(2).YData(end+1:end+N) = q4_des;
-
-        dq4 = new_data(:,14);        % omega4
-        dq4_des = new_data(:,15);    % omega4 desired
+        dq4 = new_data(:,14);       % omega4
+        dq4_des = new_data(:,15);   % omega4 desired
 
         tau2 = new_data(:,16);      % tau_2
-        %tau2_des = new_data(:,20);  % tau_2 desired
-        h6(1).YData(end+1:end+N) = tau2;
-        %h6(2).YData(end+1:end+N) = tau2_des;
-
         tau3 = new_data(:,17);      % tau_3
-        %tau3_des = new_data(:,21);  % tau_3 desired
-        h7(1).YData(end+1:end+N) = tau3;
-        %h7(2).YData(end+1:end+N) = tau3_des;
-
         tau4 = new_data(:,18);      % tau_4
-        %tau4_des = new_data(:,22);  % tau_4 desired
-        h8(1).YData(end+1:end+N) = tau4;
-        %h8(2).YData(end+1:end+N) = tau4_des;
 
-        
+        if (max(t_idx) > 16)
+            q1_des = zeros(1,N);
+            dq1_des = zeros(1,N);
+            tau2_des = zeros(1,N);
+            tau3_des = zeros(1,N);
+            tau4_des = zeros(1,N);
+        else
+            q1_des = optimal_q(1,t_idx);
+            dq1_des = optimal_dq(1,t_idx);
+            tau2_des = optimal_torques(1,t_idx);
+            tau3_des = optimal_torques(2,t_idx);
+            tau4_des = optimal_torques(3,t_idx);
+        end
+
         p = parameters();
         z = [q1 q1 q3 q4 dq1 dq2 dq3 dq4]';
         r_foot = position_foot(z,p); % will be a block of size N with three rows (x,y,z) 
         v_foot = velocity_foot(z,p);
 
-%         z_des = [q1_des' q2_des q3_des q4_des dq1_des' dq2_des dq3_des dq4_des]';
-%         r_foot_des = position_foot(z_des,p);
-%         v_foot_des = velocity_foot(z_des,p);
+        z_des = [q1_des' q2_des q3_des q4_des dq1_des' dq2_des dq3_des dq4_des]';
+        r_foot_des = position_foot(z_des,p);
+        v_foot_des = velocity_foot(z_des,p);
+
         
+        h1(1).YData(end+1:end+N) = q1;
+        h1(2).YData(end+1:end+N) = q1_des;
+
+        h2(1).YData(end+1:end+N) = dq1;
+        h2(2).YData(end+1:end+N) = dq1_des;
+
+        h3(1).YData(end+1:end+N) = q2;
+        h3(2).YData(end+1:end+N) = q2_des;
+        
+        h4(1).YData(end+1:end+N) = q3;
+        h4(2).YData(end+1:end+N) = q3_des;
+
+        h5(1).YData(end+1:end+N) = q4;
+        h5(2).YData(end+1:end+N) = q4_des;
+
+        h6(1).YData(end+1:end+N) = tau2;
+        h6(2).YData(end+1:end+N) = tau2_des;
+
+        h7(1).YData(end+1:end+N) = tau3;
+        h7(2).YData(end+1:end+N) = tau3_des;
+
+        h8(1).YData(end+1:end+N) = tau4;
+        h8(2).YData(end+1:end+N) = tau4_des;
+
         % True/desired z position
         h9(1).YData(end+1:end+N) = r_foot(2,:);
-%         h9(2).YData(end+1:end+N) = r_foot_des(2,:);
+        h9(2).YData(end+1:end+N) = r_foot_des(2,:);
 
         % True/desired x position
         h10(1).YData(end+1:end+N) = r_foot(1,:);
-%         h10(2).YData(end+1:end+N) = r_foot_des(1,:);
+        h10(2).YData(end+1:end+N) = r_foot_des(1,:);
         
         % True / desired z-position of foot
         h11(1).YData(end+1:end+N) = v_foot(2,:);
-%         h11(2).YData(end+1:end+N) = v_foot_des(2,:);
+        h11(2).YData(end+1:end+N) = v_foot_des(2,:);
     end
     
     % INIT PARAMS
@@ -246,8 +255,8 @@ function output_data = RunRobot()
 
     q0 = [0 0 0 pi];
 
-    K = [2 2 2];
-    D = [0.5 0.1 0.1];
+    K = [1.7 2 2];
+    D = [0.2 0.1 0.1];
     duty_max = 1;
 
     input = [start_period traj_period end_period q0 K D duty_max];
@@ -256,8 +265,8 @@ function output_data = RunRobot()
     output_size = 18; %23;
 
     output_data = RunExperiment(frdm_ip,frdm_port,input,output_size,params);
-    linkaxes([a1 a2],'x')
-    linkaxes([a3 a4 a5],'x')
-    linkaxes([a6 a7 a8],'x')
-    linkaxes([a9 a10 a11],'x')
+    linkaxes([a1 a2],'x');
+    linkaxes([a3 a4 a5],'x');
+    linkaxes([a6 a7 a8],'x');
+    linkaxes([a9 a10 a11],'x');
 end

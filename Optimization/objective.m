@@ -3,7 +3,7 @@ function f = objective(Z,p,U)
 % and u
 
     final_leg_vel = velocity_foot(Z(:,end),p); % end effector velocity at final time
-    final_body_ang = Z(1,end); %q1
+    max_body_ang = max(abs(Z(1,:))); %q1
     N = size(U,2);
     ang_vel_on_body = 0;    % torques acting on body/angular vel of body
     torques = 0;            % applied motor torques
@@ -18,7 +18,7 @@ function f = objective(Z,p,U)
 
     % maximize final leg vel, while minimizing ang vel on body and
     % minimizing applied torques
-    f = -final_leg_vel(2) + final_body_ang + ang_vel_on_body + torques;
+    f = -final_leg_vel(2) + max_body_ang + ang_vel_on_body + torques;
     %f = -final_leg_vel(2)+ang_vel_on_body;
     %f = torques;
 

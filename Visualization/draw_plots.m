@@ -34,24 +34,24 @@ function draw_plots(Z,p,U,tspan)
     xlabel('Time (s)'); ylabel('Velocity (m)'); legend({'vel_x','vel_y'});
     
     figure(4); clf;
-    plot(tspan,Z(1:nz,1:end-1)*180/pi)
+    plot(tspan,Z(1:nz,1:end-1))
     if plot_w_arm 
     legend('$q_1$','$q_2$','$q_3$','$q_4$','Interpreter','latex');
     else
     legend('$q_1$','$q_2$','$q_3$','Interpreter','latex');
     end
     xlabel('Time (s)');
-    ylabel('Angle (deg)');
+    ylabel('Angle (rad)');
     
     figure(5)
-    plot(tspan,Z(nz+1:2*nz,1:end-1)*180/pi)
+    plot(tspan,Z(nz+1:2*nz,1:end-1))
     if plot_w_arm
     legend('$\dot{q}_1$','$\dot{q}_2$','$\dot{q}_3$','$\dot{q}_4$','Interpreter','latex');
     else 
     legend('$\dot{q}_1$','$\dot{q}_2$','$\dot{q}_3$','Interpreter','latex');
     end
     xlabel('Time (s)');
-    ylabel('Angular Velocity (deg/sec)');
+    ylabel('Angular Velocity (rad/sec)');
 
     figure(6)
     if plot_w_arm
