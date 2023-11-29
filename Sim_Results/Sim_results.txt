@@ -1,0 +1,43 @@
+% exp1
+timestep 0.01 tf 0.5 nothing else changed
+final_leg_vel_y =
+
+    0.3728
+
+
+max_body_ang =
+
+    0.1201
+
+
+ang_vel_on_body =
+
+    3.4939
+
+
+torques =
+
+    1.6580
+
+
+
+%exp2
+dt 0.03 tf 0.5 obj/constr unchanged
+final_leg_vel_y =
+
+    0.0996
+
+
+max_body_ang =
+
+    0.1741
+
+
+ang_vel_on_body =
+
+    6.6471
+
+
+torques =
+
+    0.4069
