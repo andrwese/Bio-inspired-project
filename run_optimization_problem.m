@@ -10,7 +10,7 @@ addpath("./data");
 addpath("Hardware/");
 addpath("Sim_Results/");
 
-exp='exp3'; %experiment number (used for plotting)
+exp='exp5'; %experiment number (used for plotting)
 
 opti = casadi.Opti();       % our optimal solver
 
@@ -19,7 +19,7 @@ param = parameters(); % retrieve parameters
 p = opti.parameter(length(param), 1);
 opti.set_value(p,param);
 
-dt = 0.001;          % length of each timestep
+dt = 0.01;          % length of each timestep
 tf = 0.5;           % final time
 N = floor(tf/dt);   % number of timestep
 nz = param(end);    % number of generalized coordinates
@@ -93,12 +93,12 @@ opti.solver('ipopt',struct(),struct('print_level', 0));   % set numerical backen
 
 sol = opti.solve();     % obtain solution
 
+compute_results(sol.value(Z),param,sol.value(U))
+
 % Plot optimal trajectories
 tspan = linspace(0,tf,N);
 draw_plots(sol.value(Z),param,sol.value(U),tspan,exp);
 animateSol(tspan,sol.value(Z),param);
-
-compute_results(sol.value(Z),param,sol.value(U))
 
 optimal_torques = sol.value(U);
 optimal_angles = sol.value(Z(1:nz,:));

@@ -203,12 +203,12 @@ function output_data = RunRobot()
 
         p = parameters();
         z = [q1 q1 q3 q4 dq1 dq2 dq3 dq4]';
-        r_foot = position_foot(z,p); % will be a block of size N with three rows (x,y,z) 
-        v_foot = velocity_foot(z,p);
+        r_foot = position_foot_and_arm(z,p); % will be a block of size N with three rows (x,y,z) 
+        v_foot = velocity_foot_and_arm(z,p);
 
         z_des = [q1_des' q2_des q3_des q4_des dq1_des' dq2_des dq3_des dq4_des]';
-        r_foot_des = position_foot(z_des,p);
-        v_foot_des = velocity_foot(z_des,p);
+        r_foot_des = position_foot_and_arm(z_des,p);
+        v_foot_des = velocity_foot_and_arm(z_des,p);
 
         
         h1(1).YData(end+1:end+N) = q1;

@@ -2,7 +2,7 @@ function compute_results(Z,p,U)
 % computes the objective function value, based on our decision variables z
 % and u
 
-    final_leg_vel = velocity_foot(Z(:,end),p); % end effector velocity at final time
+    final_leg_vel = velocity_foot_and_arm(Z(:,end),p); % end effector velocity at final time
     max_body_ang = max(abs(Z(1,:))); %q1
     N = size(U,2);
     ang_vel_on_body = 0;    % torques acting on body/angular vel of body

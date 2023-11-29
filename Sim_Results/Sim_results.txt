@@ -1,43 +1,116 @@
-% exp1
-timestep 0.01 tf 0.5 nothing else changed
+exp1
+--------------
+dt 0.01, tf 0.5, nothing else changed
+
 final_leg_vel_y =
 
-    0.3728
+    3.3182
 
 
 max_body_ang =
 
-    0.1201
+    0.1197
 
 
 ang_vel_on_body =
 
-    3.4939
+    3.3899
 
 
 torques =
 
-    1.6580
+    1.7259
 
+---------------------------------------------------
+exp2
+-----------
+dt 0.03, tf 0.5, obj/constr unchanged
 
-
-%exp2
-dt 0.03 tf 0.5 obj/constr unchanged
 final_leg_vel_y =
 
-    0.0996
+    1.2399
 
 
 max_body_ang =
 
-    0.1741
+    0.1721
 
 
 ang_vel_on_body =
 
-    6.6471
+    6.4326
 
 
 torques =
 
-    0.4069
+    0.3985
+
+-----------------------------------------------------
+exp 3
+----------
+dt 0.01, tf 0.5, moved CM for leg and arm to their actual positions (not end as before)
+
+final_leg_vel_y =
+
+    8.5202
+
+
+max_body_ang =
+
+    0.1289
+
+
+ang_vel_on_body =
+
+    3.7109
+
+
+torques =
+
+    1.1832
+
+------------------------------------------------
+exp4
+----------
+dt 0.01, tf 0.5, CM is at end of leg and arm, but their mass is 0.1 kg bigger (added mass at end)
+
+final_leg_vel_y =
+
+    1.4358
+
+
+max_body_ang =
+
+    0.1729
+
+
+ang_vel_on_body =
+
+    7.9484
+
+
+torques =
+
+    3.8090
+
+--------------------------------------------
+dt 0.01, tf 0.5, CM at end, higher weight (50) for max_body_angle in obj
+
+final_leg_vel_y =
+
+    3.1942
+
+
+max_body_ang =
+
+    0.1131
+
+
+ang_vel_on_body =
+
+    3.4739
+
+
+torques =
+
+    1.6769

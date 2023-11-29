@@ -3,8 +3,8 @@ function p = parameters()
 mp =.145;               % pendulum mass           
 mb =.0436 + 2*0.210;    % body mass + 2 motors
 m1 =.047 + .21 + 0.014; % thigh mass + 1 motor + clamp
-m2 =.02274 + .014;      % leg mass + clamp
-m3 =.01756 + .014;      % arm mass 
+m2 =.02274 + .014 ;      % leg mass + clamp
+m3 =.01756 + .014 ;      % arm mass + clamp
 
 Ip = 9.25 * 10^-6;      % Inertia of pendulum
 Ib = 22.176 * 10^-6;    % Inertia of body

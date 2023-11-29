@@ -43,7 +43,7 @@ function draw_plots(Z,p,U,tspan,exp)
     xlabel('Time (s)');
     ylabel('Angle (rad)');
     
-    fig5=figure(5)
+    fig5=figure(5);
     plot(tspan,Z(nz+1:2*nz,1:end-1))
     if plot_w_arm
     legend('$\dot{q}_1$','$\dot{q}_2$','$\dot{q}_3$','$\dot{q}_4$','Interpreter','latex');
@@ -53,7 +53,7 @@ function draw_plots(Z,p,U,tspan,exp)
     xlabel('Time (s)');
     ylabel('Angular Velocity (rad/sec)');
 
-    fig6=figure(6)
+    fig6=figure(6);
     if plot_w_arm
     plot(tspan,U(1,:),tspan,U(2,:),tspan,U(3,:));
     legend('$\tau_1$','$\tau_2$','$\tau_3$','Interpreter','latex');
