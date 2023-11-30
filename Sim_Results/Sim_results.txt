@@ -93,7 +93,9 @@ torques =
 
     3.8090
 
---------------------------------------------
+--------------------------------------------------------
+exp5
+----------------
 dt 0.01, tf 0.5, CM at end, higher weight (50) for max_body_angle in obj
 
 final_leg_vel_y =
@@ -114,3 +116,99 @@ ang_vel_on_body =
 torques =
 
     1.6769
+
+-----------------------------------
+exp6
+--------
+dt = 0.03, tf=0.8, measured parameters
+
+final_leg_vel_y =
+
+    2.7322
+
+
+max_body_ang =
+
+    0.1297
+
+
+ang_vel_on_body =
+
+    1.9592
+
+
+torques =
+
+    0.6415
+
+------------------------------------
+exp7
+--------
+dt = 0.03, tf=0.5, measured p, q4_0=pi;
+
+final_leg_vel_y =
+
+    2.3095
+
+
+max_body_ang =
+
+    0.1886
+
+
+ang_vel_on_body =
+
+    4.4508
+
+
+torques =
+
+    0.3487
+
+--------hardware-------------
+final_leg_vel_y =
+
+   -0.0067
+or -0.0079
+
+
+torques =
+
+   602.9533
+or 615.0517
+
+------------------------------------
+exp8
+--------
+dt = 0.03, tf=0.5, measured p, q4_0=2*pi-1.0472;
+
+final_leg_vel_y =
+
+    2.3467
+
+
+max_body_ang =
+
+    0.1599
+
+
+ang_vel_on_body =
+
+    3.0790
+
+
+torques =
+
+    0.3568
+
+
+-----hardware results--------------
+
+final_leg_vel_y =
+
+    0.0460
+
+
+torques =
+
+  674.6604
